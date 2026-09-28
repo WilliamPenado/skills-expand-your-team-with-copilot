@@ -25,12 +25,12 @@ def init_database():
         for name, details in initial_activities.items():
             activities_collection.insert_one({"_id": name, **details})
     else:
-        manga_maniacs = initial_activities["Manga Maniacs"]
-        activities_collection.update_one(
-            {"_id": "Manga Maniacs"},
-            {"$set": manga_maniacs},
-            upsert=True
-        )
+        for name, details in reconciled_activities.items():
+            activities_collection.update_one(
+                {"_id": name},
+                {"$set": details},
+                upsert=True
+            )
             
     # Initialize teacher accounts if empty
     if teachers_collection.count_documents({}) == 0:
@@ -182,6 +182,10 @@ initial_activities = {
         "max_participants": 16,
         "participants": ["william@mergington.edu", "jacob@mergington.edu"]
     }
+}
+
+reconciled_activities = {
+    "Manga Maniacs": initial_activities["Manga Maniacs"]
 }
 
 initial_teachers = [
