@@ -25,7 +25,7 @@ def init_database():
         for name, details in initial_activities.items():
             activities_collection.insert_one({"_id": name, **details})
     
-    for name, details in reconciled_activities.items():
+    for name, details in reconciled_activity_updates.items():
         activities_collection.update_one(
             {"_id": name},
             {"$set": details},
@@ -184,8 +184,13 @@ initial_activities = {
     }
 }
 
-reconciled_activities = {
-    "Manga Maniacs": initial_activities["Manga Maniacs"]
+reconciled_activity_updates = {
+    "Manga Maniacs": {
+        "description": initial_activities["Manga Maniacs"]["description"],
+        "schedule": initial_activities["Manga Maniacs"]["schedule"],
+        "schedule_details": initial_activities["Manga Maniacs"]["schedule_details"],
+        "max_participants": initial_activities["Manga Maniacs"]["max_participants"]
+    }
 }
 
 initial_teachers = [
