@@ -24,6 +24,13 @@ def init_database():
     if activities_collection.count_documents({}) == 0:
         for name, details in initial_activities.items():
             activities_collection.insert_one({"_id": name, **details})
+    else:
+        manga_maniacs = initial_activities["Manga Maniacs"]
+        activities_collection.update_one(
+            {"_id": "Manga Maniacs"},
+            {"$set": manga_maniacs},
+            upsert=True
+        )
             
     # Initialize teacher accounts if empty
     if teachers_collection.count_documents({}) == 0:
@@ -121,14 +128,14 @@ initial_activities = {
         "participants": ["james@mergington.edu", "benjamin@mergington.edu"]
     },
     "Manga Maniacs": {
-        "description": "Dive into action-packed adventures, epic rivalries, and unforgettable heroes from the world of Japanese Manga (graphic novels).",
-        "schedule": "Tuesdays, 5:00 PM - 6:00 PM",
+        "description": "Explore the fantastic stories of the most interesting characters from Japanese Manga (graphic novels).",
+        "schedule": "Tuesdays, 7:00 PM - 8:00 PM",
         "schedule_details": {
             "days": ["Tuesday"],
-            "start_time": "17:00",
-            "end_time": "18:00"
+            "start_time": "19:00",
+            "end_time": "20:00"
         },
-        "max_participants": 25,
+        "max_participants": 15,
         "participants": []
     },
     "Debate Team": {
