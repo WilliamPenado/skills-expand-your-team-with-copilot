@@ -28,7 +28,12 @@ def init_database():
     for name, details in reconciled_activity_updates.items():
         activities_collection.update_one(
             {"_id": name},
-            {"$set": details},
+            {
+                "$set": details,
+                "$setOnInsert": {
+                    "participants": initial_activities[name]["participants"]
+                }
+            },
             upsert=True
         )
             
