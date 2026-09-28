@@ -24,13 +24,13 @@ def init_database():
     if activities_collection.count_documents({}) == 0:
         for name, details in initial_activities.items():
             activities_collection.insert_one({"_id": name, **details})
-    else:
-        for name, details in reconciled_activities.items():
-            activities_collection.update_one(
-                {"_id": name},
-                {"$set": details},
-                upsert=True
-            )
+    
+    for name, details in reconciled_activities.items():
+        activities_collection.update_one(
+            {"_id": name},
+            {"$set": details},
+            upsert=True
+        )
             
     # Initialize teacher accounts if empty
     if teachers_collection.count_documents({}) == 0:
