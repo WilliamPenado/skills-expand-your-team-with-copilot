@@ -26,11 +26,10 @@ def init_database():
             activities_collection.insert_one({"_id": name, **details})
     
     for name, details in reconciled_activity_updates.items():
-        if activities_collection.count_documents({"_id": name}) > 0:
-            activities_collection.update_one(
-                {"_id": name},
-                {"$set": details}
-            )
+        activities_collection.update_one(
+            {"_id": name},
+            {"$set": details}
+        )
             
     # Initialize teacher accounts if empty
     if teachers_collection.count_documents({}) == 0:
