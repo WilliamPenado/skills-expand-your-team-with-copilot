@@ -24,6 +24,12 @@ def init_database():
     if activities_collection.count_documents({}) == 0:
         for name, details in initial_activities.items():
             activities_collection.insert_one({"_id": name, **details})
+    
+    for name, details in reconciled_activity_updates.items():
+        activities_collection.update_one(
+            {"_id": name},
+            {"$set": details}
+        )
             
     # Initialize teacher accounts if empty
     if teachers_collection.count_documents({}) == 0:
@@ -121,7 +127,7 @@ initial_activities = {
         "participants": ["james@mergington.edu", "benjamin@mergington.edu"]
     },
     "Manga Maniacs": {
-        "description": "Dive into action-packed adventures, epic rivalries, and unforgettable heroes from the world of Japanese Manga (graphic novels).",
+        "description": "Jump into the world of Japanese Manga (graphic novels) with bold heroes, dramatic rivalries, and unforgettable adventures.",
         "schedule": "Tuesdays, 5:00 PM - 6:00 PM",
         "schedule_details": {
             "days": ["Tuesday"],
@@ -174,6 +180,15 @@ initial_activities = {
         },
         "max_participants": 16,
         "participants": ["william@mergington.edu", "jacob@mergington.edu"]
+    }
+}
+
+reconciled_activity_updates = {
+    "Manga Maniacs": {
+        "description": initial_activities["Manga Maniacs"]["description"],
+        "schedule": initial_activities["Manga Maniacs"]["schedule"],
+        "schedule_details": initial_activities["Manga Maniacs"]["schedule_details"],
+        "max_participants": initial_activities["Manga Maniacs"]["max_participants"]
     }
 }
 
