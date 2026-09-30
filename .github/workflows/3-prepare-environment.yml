@@ -167,7 +167,13 @@ jobs:
 
       - name: Disable current workflow and enable next one
         run: |
-          gh workflow disable "${{github.workflow}}"
-          gh workflow enable "Step 4"
+          next_workflow_id="$(gh api "repos/${{ github.repository }}/actions/workflows" --jq '.workflows[] | select(.name == "Step 4" or .path == ".github/workflows/4-play-time.yml") | .id' | head -n 1)"
+          if [ -n "$next_workflow_id" ]; then
+            gh workflow enable "$next_workflow_id"
+            gh workflow disable "${{github.workflow}}"
+          else
+            echo "Step 4 workflow is not registered yet; leaving ${GITHUB_WORKFLOW} enabled."
+            exit 1
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
