@@ -569,6 +569,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      ${renderShareButtons(name)}
     `;
 
     // Add click handlers for delete buttons
@@ -587,7 +588,155 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Add click handlers for share buttons
+    attachShareHandlers(activityCard, name, details);
+
     activitiesList.appendChild(activityCard);
+  }
+
+  // Build the HTML for the "share this activity" button row
+  function renderShareButtons(name) {
+    return `
+      <div class="share-container">
+        <div class="share-label">Share:</div>
+        <div class="share-buttons">
+          <button
+            type="button"
+            class="share-button share-email tooltip"
+            data-activity="${name}"
+            data-share="email"
+            aria-label="Share ${name} by email"
+          >
+            ✉️
+            <span class="tooltip-text">Share by email</span>
+          </button>
+          <button
+            type="button"
+            class="share-button share-twitter tooltip"
+            data-activity="${name}"
+            data-share="twitter"
+            aria-label="Share ${name} on X (Twitter)"
+          >
+            🐦
+            <span class="tooltip-text">Share on X (Twitter)</span>
+          </button>
+          <button
+            type="button"
+            class="share-button share-facebook tooltip"
+            data-activity="${name}"
+            data-share="facebook"
+            aria-label="Share ${name} on Facebook"
+          >
+            📘
+            <span class="tooltip-text">Share on Facebook</span>
+          </button>
+          <button
+            type="button"
+            class="share-button share-whatsapp tooltip"
+            data-activity="${name}"
+            data-share="whatsapp"
+            aria-label="Share ${name} on WhatsApp"
+          >
+            💬
+            <span class="tooltip-text">Share on WhatsApp</span>
+          </button>
+          <button
+            type="button"
+            class="share-button share-copy tooltip"
+            data-activity="${name}"
+            data-share="copy"
+            aria-label="Copy link for ${name}"
+          >
+            🔗
+            <span class="tooltip-text">Copy link</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Build the message and URL used when sharing an activity, then open the
+  // right sharing option (email, social network, or copy to clipboard).
+  function attachShareHandlers(activityCard, name, details) {
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const shareType = button.dataset.share;
+        const pageUrl = window.location.href;
+        const shareText = `Check out "${name}" at Mergington High School! ${details.description}`;
+
+        switch (shareType) {
+          case "email":
+            window.location.href = `mailto:?subject=${encodeURIComponent(
+              `Join me for ${name}!`
+            )}&body=${encodeURIComponent(`${shareText}\n\n${pageUrl}`)}`;
+            break;
+          case "twitter":
+            window.open(
+              `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                shareText
+              )}&url=${encodeURIComponent(pageUrl)}`,
+              "_blank",
+              "noopener,noreferrer"
+            );
+            break;
+          case "facebook":
+            window.open(
+              `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                pageUrl
+              )}&quote=${encodeURIComponent(shareText)}`,
+              "_blank",
+              "noopener,noreferrer"
+            );
+            break;
+          case "whatsapp":
+            window.open(
+              `https://wa.me/?text=${encodeURIComponent(
+                `${shareText} ${pageUrl}`
+              )}`,
+              "_blank",
+              "noopener,noreferrer"
+            );
+            break;
+          case "copy":
+            copyShareLink(`${shareText} ${pageUrl}`);
+            break;
+          default:
+            break;
+        }
+      });
+    });
+  }
+
+  // Copy the share text/link to the clipboard and let the user know it worked
+  function copyShareLink(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => showMessage("Link copied to clipboard!", "success"))
+        .catch(() =>
+          showMessage("Could not copy link. Please try again.", "error")
+        );
+      return;
+    }
+
+    // Fallback for browsers without the Clipboard API
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      document.execCommand("copy");
+      showMessage("Link copied to clipboard!", "success");
+    } catch (error) {
+      showMessage("Could not copy link. Please try again.", "error");
+    } finally {
+      document.body.removeChild(textarea);
+    }
   }
 
   // Event listeners for search and filter

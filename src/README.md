@@ -6,6 +6,7 @@ A super simple website application that allows students to view and sign up for 
 
 - View all available extracurricular activities
 - Sign up for activities
+- Share an activity with friends by email, X (Twitter), Facebook, WhatsApp, or copying a link
 
 ## Development Guide
 
