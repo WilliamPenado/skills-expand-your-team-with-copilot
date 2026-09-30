@@ -32,6 +32,23 @@
   --info-light: #d1ecf1;
 }
 
+body.dark-mode {
+  --primary: #303f9f;
+  --primary-light: #5c6bc0;
+  --primary-dark: #283593;
+  --background: #121212;
+  --surface: #1e1e1e;
+  --text-primary: #f5f5f5;
+  --text-secondary: #b0b0b0;
+  --border: #424242;
+  --border-light: #333333;
+  --border-focus: #616161;
+  --success-light: #1b3a20;
+  --warning-light: #4a3912;
+  --error-light: #4a1c1c;
+  --info-light: #12343a;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -93,6 +110,14 @@ section h3 {
   border-bottom: 1px solid var(--border);
   color: var(--primary);
   font-size: 1.1rem;
+}
+
+body.dark-mode section h3,
+body.dark-mode .sidebar-filters h3,
+body.dark-mode .activity-card h4,
+body.dark-mode .participants-list h5,
+body.dark-mode #login-modal .modal-content h3 {
+  color: #9fa8da;
 }
 
 /* New Layout Styles */
@@ -203,6 +228,11 @@ section h3 {
   border-radius: 10px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+}
+
+body.dark-mode .activity-tag {
+  background: #303f9f;
+  color: #e8eaf6;
 }
 
 /* Capacity Indicator */
@@ -538,6 +568,11 @@ footer {
   transition: all 0.3s ease;
 }
 
+input {
+  color: var(--text-primary);
+  background-color: var(--surface);
+}
+
 .search-box input:focus {
   outline: none;
   border-color: var(--primary-light);
@@ -661,6 +696,9 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #user-status {
@@ -690,6 +728,19 @@ footer {
   transition: background-color 0.2s;
 }
 
+.theme-toggle {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
 .icon-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -707,4 +758,12 @@ footer {
 
 #logout-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  #user-controls {
+    position: static;
+    justify-content: center;
+    margin-top: 10px;
+  }
 }
