@@ -58,7 +58,8 @@ initial_activities = {
             "end_time": "08:00"
         },
         "max_participants": 20,
-        "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
+        "participants": ["emma@mergington.edu", "sophia@mergington.edu"],
+        "difficulty": "Beginner"
     },
     "Morning Fitness": {
         "description": "Early morning physical training and exercises",
@@ -157,7 +158,8 @@ initial_activities = {
             "end_time": "14:00"
         },
         "max_participants": 15,
-        "participants": ["ethan@mergington.edu", "oliver@mergington.edu"]
+        "participants": ["ethan@mergington.edu", "oliver@mergington.edu"],
+        "difficulty": "Intermediate"
     },
     "Science Olympiad": {
         "description": "Weekend science competition preparation for regional and state events",
@@ -179,16 +181,26 @@ initial_activities = {
             "end_time": "17:00"
         },
         "max_participants": 16,
-        "participants": ["william@mergington.edu", "jacob@mergington.edu"]
+        "participants": ["william@mergington.edu", "jacob@mergington.edu"],
+        "difficulty": "Advanced"
     }
 }
 
 reconciled_activity_updates = {
+    "Programming Class": {
+        "difficulty": initial_activities["Programming Class"]["difficulty"]
+    },
     "Manga Maniacs": {
         "description": initial_activities["Manga Maniacs"]["description"],
         "schedule": initial_activities["Manga Maniacs"]["schedule"],
         "schedule_details": initial_activities["Manga Maniacs"]["schedule_details"],
         "max_participants": initial_activities["Manga Maniacs"]["max_participants"]
+    },
+    "Weekend Robotics Workshop": {
+        "difficulty": initial_activities["Weekend Robotics Workshop"]["difficulty"]
+    },
+    "Sunday Chess Tournament": {
+        "difficulty": initial_activities["Sunday Chess Tournament"]["difficulty"]
     }
 }
 
