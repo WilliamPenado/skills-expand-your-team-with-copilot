@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Search and filter elements
   const searchInput = document.getElementById("activity-search");
   const searchButton = document.getElementById("search-button");
+  const groupBySelect = document.getElementById("group-by");
   const categoryFilters = document.querySelectorAll(".category-filter");
   const difficultyFilters = document.querySelectorAll(".difficulty-filter");
   const dayFilters = document.querySelectorAll(".day-filter");
@@ -54,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let allActivities = {};
   let currentFilter = "all";
   let currentDifficulty = "all";
+  let groupBy = "none";
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
@@ -495,7 +497,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Display filtered activities
+    if (groupBy === "category") {
+      const groupedActivities = Object.fromEntries(
+        Object.keys(activityTypes).map((type) => [type, []])
+      );
+
+      Object.entries(filteredActivities).forEach(([name, details]) => {
+        const activityType = getActivityType(name, details.description);
+        groupedActivities[activityType].push([name, details]);
+      });
+
+      Object.entries(groupedActivities).forEach(([type, activities]) => {
+        if (activities.length === 0) {
+          return;
+        }
+
+        const heading = document.createElement("h3");
+        heading.className = "activity-group-heading";
+        heading.textContent = activityTypes[type].label;
+        activitiesList.appendChild(heading);
+
+        activities.forEach(([name, details]) => {
+          renderActivityCard(name, details);
+        });
+      });
+      return;
+    }
+
     Object.entries(filteredActivities).forEach(([name, details]) => {
       renderActivityCard(name, details);
     });
@@ -777,6 +805,11 @@ document.addEventListener("DOMContentLoaded", () => {
   searchButton.addEventListener("click", (event) => {
     event.preventDefault();
     searchQuery = searchInput.value;
+    displayFilteredActivities();
+  });
+
+  groupBySelect.addEventListener("change", () => {
+    groupBy = groupBySelect.value;
     displayFilteredActivities();
   });
 
